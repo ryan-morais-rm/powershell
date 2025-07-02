@@ -1,29 +1,54 @@
-## POWERSHELL
+# 📂 Projeto PowerShell Active Directory
 
-1. Projeto para armazenar e distribuir os arquivos poweshell do Active Directory
+Projeto para armazenar e distribuir arquivos PowerShell com dados do Active Directory.
 
-Criação de uma pasta “/Dados” dentro da VM onde vai conter objetos dos usuários em formato .csv.
-Dentro da pasta “/Dados” vão ter sub-pastas, separando por anos e meses, respectivamente.  
-Separar dados como: nome, e-mail, departamento…
-Salvar no começo do arquivo de modo padronizado a data, por exemplo: “Dados extraídos na data 25/05/2025”
-Fazer isso via script powershell, chamando outros scripts.
--> Criar um script raiz.ps1. Dentro do script vai ter uma tarefa agendada, colocando
-     ele para ser executado em X hora. Depois, esse script vai verificar dentro da
-     pasta “/Dados”, os nomes de arquivos já existentes, por exemplo:
-     “dados_usuarios_1.csv”. Então, salvar o novo arquivo extraído como
-     “dados_usuarios_2.csv”... 
-A princípio, vamos utilizar o comando principal “get-ADuser” com seus parâmetros. 
 
-Estruturação dos arquivos:
+## 📑 Descrição
 
-./raiz.ps1  ./parser.bat  ./pastas.bat 
-    I->   /Dados
-              l->  /2025 / 2026 … 
-                        l->  /julho /agosto /setembro …
-                                 l-> dados_usuarios_X.csv … 
+- Criação de uma pasta `/Dados` dentro da VM onde ficarão os objetos dos usuários em formato `.csv`.
+- Dentro da pasta `/Dados`, haverá subpastas separando por **anos** e **meses**.
+- Os dados exportados conterão:
+  - Nome
+  - E-mail
+  - Departamento
+- No início de cada arquivo CSV, será salva a data em formato padronizado, por exemplo: Dados extraídos na data 25/05/2025
 
-Passo a passo:
-Ir no gerenciamento de windows e agendar para que o script seja programado diariamente. 
-Criar o script pastas.bat que vai criar as pastas de anos e meses.  
-Criar o script parser.bat que vai ser o portador do “get-ADuser”. 
-Chamar todos esses scripts dentro do ./raiz.ps1, que executará o pastas.bat uma única vez e o parser.ps1 constantemente.
+
+- A extração será feita por script PowerShell, chamando outros scripts auxiliares.
+
+
+## ⚙️ Funcionamento
+
+### 🎯 Objetivo
+
+Criar um script `raiz.ps1` responsável por:
+
+- Criar as pastas iniciais de anos e meses.
+- Agendar uma tarefa para executar automaticamente em determinado horário.
+- Verificar os arquivos já existentes dentro da pasta `/Dados` e salvar novos arquivos com nomes incrementais, por exemplo: dados-usuarios-1.csv, dados-usuarios-2.csv, dados-usuarios-3.csv
+
+
+## 📝 Passo a Passo
+
+1. **Agendar Execução Automática**
+   - Acessar o **Gerenciamento de Tarefas do Windows**.
+   - Agendar a execução diária do script `raiz.ps1`.
+
+2. **Criar Script `pastas.ps1`**
+   - Responsável por criar as pastas de anos e meses.
+
+3. **Criar Script `parser.ps1`**
+   - Responsável por chamar `Get-ADUser` e gerar os arquivos `.csv`.
+
+4. **Executar `raiz.ps1`**
+   - O script `raiz.ps1` executa:
+     - O `pastas.bat` (uma única vez para criar estrutura).
+     - O `parser.bat` de forma recorrente, gerando os arquivos de dados.
+
+---
+
+## 📌 Observações
+
+- Certifique-se de que o usuário que executa a tarefa agendada possua permissões de leitura do Active Directory e gravação na pasta `/Dados`.
+- Verifique a codificação do CSV para evitar problemas com caracteres especiais.
+- Mantenha backup dos arquivos gerados.
